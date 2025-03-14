@@ -23,5 +23,12 @@
 		public double Vynosy { get => vynosy; set => vynosy = Math.Round(Math.Abs(value), 2); }
 		public string Popis { get; set; } = "";
 		public double Zisk => Math.Round(Vynosy - Naklady,2);
+
+		/// <summary>
+		/// Vlastnost pro zobrazení zisku v HTML formátu
+		/// </summary>
+		public string ZiskHtml => (Zisk > 0) ? $"<span style=\"color:green;\"> {Zisk:C2} </span >" : $"<span style=\"color:red;\"> {Zisk:C2} </span >"; //Ternární operátor
+
+
 	}
 }
