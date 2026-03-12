@@ -1,0 +1,40 @@
+﻿@page "/evidence"
+
+<PageTitle>Evidence financí</PageTitle>
+
+<h3>Evidence nákladů a výnosů</h3>
+
+<div class="container mt-3">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>Datum</th>
+                <th>Popis</th>
+                <th>Výnosy</th>
+                <th>Náklady</th>
+                <th>Zisk</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var itemTransakce in EvidenceService.TransakceSeznam)
+            {
+                var cssClass = itemTransakce.Zisk >= 0 ? "text-success" : "text-danger";
+                <tr>
+                    <td>@itemTransakce.Datum.ToShortDateString()</td>
+                    <td>@itemTransakce.Popis</td>
+                    <td class="text-end text-success">@itemTransakce.Vynosy.ToString("N2")</td>
+                    <td class="text-end text-danger">@itemTransakce.Naklady.ToString("N2")</td>
+                    <td class="text-end @cssClass">@itemTransakce.Zisk.ToString("N2")</td>
+                </tr>
+            }
+            
+           
+        </tbody>
+    </table>
+  
+</div>
+
+@code {
+
+}
