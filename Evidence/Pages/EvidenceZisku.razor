@@ -4,6 +4,44 @@
 
 <h3>Evidence nákladů a výnosů</h3>
 
+<div class="card">
+    <div class="card-body">
+        <EditForm Model="formularTransakce" OnValidSubmit="UlozitTransakci">
+            <DataAnnotationsValidator />
+
+            <div class="row align-items-center">
+                <div class="col mb-1 mt-1">
+                    <label for="datum" class="form-label">Datum:</label>
+                    <InputDate class="form-control" id="datum" @bind-Value="formularTransakce.Datum" placeholder="Vložte datum" />
+                    <ValidationMessage For="@(() => formularTransakce.Datum)" />
+                </div>
+
+                <div class="col mb-1 mt-1">
+                    <label for="vynosy" class="form-label">Výnosy:</label>
+                    <InputNumber class="form-control" id="vynosy" @bind-Value="formularTransakce.Vynosy" placeholder="Vložte výnosy" />
+                    <ValidationMessage For="@(() => formularTransakce.Vynosy)" />
+                </div>
+
+                <div class="col mb-1 mt-1">
+                    <label for="naklady" class="form-label">Náklady:</label>
+                    <InputNumber class="form-control" id="naklady" @bind-Value="formularTransakce.Naklady" placeholder="Vložte náklady" />
+                    <ValidationMessage For="@(() => formularTransakce.Naklady)" />
+                </div>
+
+                <div class="col mb-1 mt-1">
+                    <label for="popis" class="form-label">Popis:</label>
+                    <InputText class="form-control" id="popis" @bind-Value="formularTransakce.Popis" placeholder="Vložte popis" />
+                    <ValidationMessage For="@(() => formularTransakce.Popis)" />
+                </div>
+
+                <button type="submit" class="col btn btn-primary">Přidat záznam</button>
+            </div>
+            
+        </EditForm>
+    </div>
+</div>
+
+
 <div class="container mt-3">
     <table class="table">
         <thead class="table-dark">
@@ -26,6 +64,20 @@
                     <td class="text-end text-success">@itemTransakce.Vynosy.ToString("N2")</td>
                     <td class="text-end text-danger">@itemTransakce.Naklady.ToString("N2")</td>
                     <td class="text-end @cssClass">@itemTransakce.Zisk.ToString("N2")</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">
+                            <span class="material-symbols-outlined">
+                                edit
+                            </span>
+                            Upravit
+                        </button>
+                        <button type="button" class="btn btn-outline-danger">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                            Smazat
+                        </button>
+                    </td>
                 </tr>
             }
             

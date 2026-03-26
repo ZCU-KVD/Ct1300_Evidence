@@ -6,6 +6,11 @@ namespace Evidence.Services
 	{
 		public List<Transakce> TransakceSeznam { get; set; } = new List<Transakce>();
 
+		public void PridatTransakci(Transakce novaTransakce)
+		{
+			TransakceSeznam.Add(novaTransakce);
+		}
+
 		public void VygenerovatNahodnaData(int pocet) 
 		{ 
 			TransakceSeznam.Clear();
