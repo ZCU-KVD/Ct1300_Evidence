@@ -11,6 +11,16 @@ namespace Evidence.Services
 			TransakceSeznam.Add(novaTransakce);
 		}
 
+		public void AktualizovatTransakci(Transakce puvodni, Transakce noveHodnoty)
+		{
+			puvodni.Aktualizovat(noveHodnoty);
+		}
+
+		public void OdeberTransakci(Transakce mazanaTransakce)
+		{
+			TransakceSeznam.Remove(mazanaTransakce);
+		}
+
 		public void VygenerovatNahodnaData(int pocet) 
 		{ 
 			TransakceSeznam.Clear();

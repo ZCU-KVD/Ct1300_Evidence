@@ -34,9 +34,21 @@
                     <ValidationMessage For="@(() => formularTransakce.Popis)" />
                 </div>
 
-                <button type="submit" class="col btn btn-primary">Přidat záznam</button>
+                <button type="submit" class="col btn btn-primary">
+                    @(!JeEditace ? "Přidat záznam" : "Uložit změny")
+                    
+                </button>
             </div>
-            
+            @if (JeEditace)
+            {
+                <div class="alert alert-warning">
+                    <span class="material-symbols-outlined">
+                        edit
+                    </span>
+                    Právě upravujete záznam <strong>@originalEditovaneTransakce?.Datum</strong> 
+                    <button type="reset" @onclick="ZrusitEditaci" class="btn btn-outline-secondary">Zrušit editaci</button>
+                </div>
+            }
         </EditForm>
     </div>
 </div>
@@ -65,13 +77,13 @@
                     <td class="text-end text-danger">@itemTransakce.Naklady.ToString("N2")</td>
                     <td class="text-end @cssClass">@itemTransakce.Zisk.ToString("N2")</td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary">
+                        <button type="button" @onclick="() => EditovatTransakci(itemTransakce)" class="btn btn-outline-primary">
                             <span class="material-symbols-outlined">
                                 edit
                             </span>
                             Upravit
                         </button>
-                        <button type="button" class="btn btn-outline-danger">
+                        <button type="button" @onclick="() => SmazatTransakci(itemTransakce)" class="btn btn-outline-danger">
                             <span class="material-symbols-outlined">
                                 delete
                             </span>

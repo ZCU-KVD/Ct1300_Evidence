@@ -52,5 +52,31 @@ namespace Evidence.Models
 		}
 
 		public decimal Zisk => Vynosy - Naklady;
+
+		#region Pomocne metody
+		public override string ToString()
+		{
+			return $"[{Datum:d}] {Popis}: Zisk = {Zisk:N2} Kč";
+		}
+
+		public Transakce Klonovat() 
+		{
+			return new Transakce(this.Datum, this.Vynosy, this.Naklady, this.Popis)
+			{
+				Id = this.Id
+			};
+
+
+		}
+
+		public void Aktualizovat(Transakce noveHodnoty)
+		{
+			this.Datum = noveHodnoty.Datum;
+			this.Vynosy = noveHodnoty.Vynosy;
+			this.Naklady = noveHodnoty.Naklady;
+			this.Popis = noveHodnoty.Popis;
+		}
+
+		#endregion
 	}
 }
