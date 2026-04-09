@@ -25,6 +25,12 @@ namespace Evidence.Pages
 		private Models.Transakce? originalEditovaneTransakce = null;
 
 		private bool JeEditace => originalEditovaneTransakce != null;
+		private string FiltrPopis { get; set; } = "";
+		private decimal? FiltrZiskHodnota { get; set; }
+		private Models.OperatorZisku FiltrZiskOperator { get; set; } = Models.OperatorZisku.Rovno;
+
+		private List<Models.Transakce> FiltrovaneTransakce => EvidenceService.FiltrovatTransakce(FiltrPopis, FiltrZiskHodnota, FiltrZiskOperator);
+
 		#endregion
 
 		#region Formulář CRUD
@@ -65,6 +71,51 @@ namespace Evidence.Pages
 			//formularTransakce.Popis = editovanaTransakce.Popis;
 			formularTransakce = editovanaTransakce.Klonovat();
 			originalEditovaneTransakce = editovanaTransakce;
+		}
+
+		private async Task SmazatVse() 
+		{
+			bool potvrzeni = await JS.InvokeAsync<bool>("confirm", $"Opravdu chcete smazat vše?");
+
+			if (potvrzeni)
+			{
+				EvidenceService.SmazatVse();
+			}
+		}
+
+		private async Task UlozitData() 
+		{
+			var jsonData = System.Text.Json.JsonSerializer.Serialize(EvidenceService.TransakceSeznam);
+			await JS.InvokeVoidAsync("localStorage.setItem", "evidenceZiskuData", jsonData);
+			await JS.InvokeVoidAsync("alert", "Data byla uložena do localStorage.");
+		}
+
+		private async Task NacistData()
+		{
+			try
+			{
+				var json = await JS.InvokeAsync<string>("localStorage.getItem", "evidenceZiskuData");
+				if (!string.IsNullOrEmpty(json))
+				{
+					var nacteneTransakce = System.Text.Json.JsonSerializer.Deserialize<List<Models.Transakce>>(json);
+					
+					if (nacteneTransakce != null)
+					{
+						EvidenceService.TransakceSeznam = nacteneTransakce;
+						await JS.InvokeVoidAsync("alert", "Data byla načtena z localStorage.");
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				await JS.InvokeVoidAsync("alert", "Chyba při načítání dat: " + ex.Message);
+			}
+		}
+		private void ZrusitFiltr()
+		{ 
+			FiltrPopis = "";
+			FiltrZiskHodnota = null;
+			FiltrZiskOperator = Models.OperatorZisku.Rovno;
 		}
 		#endregion
 

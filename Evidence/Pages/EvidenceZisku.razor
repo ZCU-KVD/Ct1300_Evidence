@@ -2,7 +2,17 @@
 
 <PageTitle>Evidence financí</PageTitle>
 
-<h3>Evidence nákladů a výnosů</h3>
+<div class="row ">
+    <div class="col">
+        <h3>Evidence nákladů a výnosů</h3>
+    </div>
+
+    <div class="col ">
+        <button type="button" @onclick="UlozitData" class="btn btn-outline-primary">Uložit</button>
+        <button type="button" @onclick="NacistData" class="btn btn-outline-primary">Načíst</button>
+        <button type="button" @onclick="SmazatVse" class="btn btn-outline-danger">Smazat vše</button>
+    </div>
+</div>
 
 <div class="card">
     <div class="card-body">
@@ -36,7 +46,7 @@
 
                 <button type="submit" class="col btn btn-primary">
                     @(!JeEditace ? "Přidat záznam" : "Uložit změny")
-                    
+
                 </button>
             </div>
             @if (JeEditace)
@@ -45,7 +55,7 @@
                     <span class="material-symbols-outlined">
                         edit
                     </span>
-                    Právě upravujete záznam <strong>@originalEditovaneTransakce?.Datum</strong> 
+                    Právě upravujete záznam <strong>@originalEditovaneTransakce?.Datum</strong>
                     <button type="reset" @onclick="ZrusitEditaci" class="btn btn-outline-secondary">Zrušit editaci</button>
                 </div>
             }
@@ -53,6 +63,37 @@
     </div>
 </div>
 
+<div class="mt-3 row">
+    <div class="col input-group">
+        <span class="input-group-text">
+            <span class="material-symbols-outlined">
+                search
+            </span>
+        </span>
+        <input type="text" 
+            @bind="FiltrPopis"
+            @bind:event="oninput"
+            class="form-control" placeholder="Hledat v popisu">
+    </div>
+    <div class="col">
+        <select class="form-select" @bind="FiltrZiskOperator">
+            <option value="@Models.OperatorZisku.Rovno">Zisk rovno (=)</option>
+            <option value="@Models.OperatorZisku.VetsiNez">Zisk větší (&gt;)</option>
+            <option value="@Models.OperatorZisku.MensiNez">Zisk menší (&lt;)</option>
+        </select>
+    </div>
+  
+    <div class="col">
+        <input type="number" 
+            @bind="FiltrZiskHodnota"
+            @bind:event="oninput"
+            class="form-control" placeholder="Zadejte hodnotu zisku">
+    </div>
+
+    <div class="col">
+        <button type="button" @onclick="ZrusitFiltr" class="btn btn-outline-secondary">X</button>
+    </div>
+</div>
 
 <div class="container mt-3">
     <table class="table">
@@ -67,7 +108,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var itemTransakce in EvidenceService.TransakceSeznam)
+            @foreach (var itemTransakce in FiltrovaneTransakce)
             {
                 var cssClass = itemTransakce.Zisk >= 0 ? "text-success" : "text-danger";
                 <tr>
@@ -92,11 +133,11 @@
                     </td>
                 </tr>
             }
-            
-           
+
+
         </tbody>
     </table>
-  
+
 </div>
 
 @code {

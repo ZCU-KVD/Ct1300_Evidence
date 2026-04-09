@@ -39,5 +39,31 @@ namespace Evidence.Services
 			}
 
 		}
+
+		public List<Transakce> FiltrovatTransakce(string popis, decimal? ziskHodnota, OperatorZisku ziskOperator)
+		{
+			var vysledek = TransakceSeznam.AsEnumerable();
+			if (!string.IsNullOrEmpty(popis))
+			{
+				vysledek = vysledek.Where(t => t.Popis.Contains(popis, StringComparison.OrdinalIgnoreCase));
+			}
+			if (ziskHodnota.HasValue)
+			{
+				vysledek = ziskOperator switch
+				{
+					OperatorZisku.Rovno => vysledek.Where(t => t.Zisk == ziskHodnota),
+					OperatorZisku.VetsiNez => vysledek.Where(t => t.Zisk > ziskHodnota),
+					OperatorZisku.MensiNez => vysledek.Where(t => t.Zisk < ziskHodnota),
+					_ => vysledek
+				};
+			}
+
+			return vysledek.ToList();
+		}
+
+		public void SmazatVse()
+		{
+			TransakceSeznam.Clear();
+		}
 	}
 }
